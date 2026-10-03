@@ -1,0 +1,35 @@
+{
+  "name": "windowshello",
+  "version": "1.0.1",
+  "description": "Face unlock tool for Windows",
+  "author": {
+    "name": "Nikhil"
+  },
+  "repository": "yadavnikhil03/WindowsHello",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.Nikhil.windowshello",
+    "productName": "WindowsHello",
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "WindowsHello-Setup-${version}.${ext}",
+      "include": "installer.nsh"
+    }
+  },
+  "dependencies": {
+    "@vladmandic/face-api": "^1.7.13"
+  },
+  "devDependencies": {
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3"
+  }
+}

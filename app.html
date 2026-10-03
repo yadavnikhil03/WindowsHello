@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WindowsHello · Nikhil</title>
+<script src="node_modules/@vladmandic/face-api/dist/face-api.js"></script>
+<style>
+:root{--a:1;--c1:#facc15;--c2:#ec4899;--ang:135deg;--d:#000;--ink:#000;--h1:#000;--sp:cubic-bezier(.34,1.45,.5,1);--out:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font-family:"Space Grotesk",system-ui,sans-serif;font-weight:700;color:var(--ink);background-color:#fff;background-image:radial-gradient(#000 2px,transparent 2px);background-size:24px 24px;background-attachment:fixed;transition:opacity .7s var(--out),transform .7s var(--out),filter .7s}
+body.lock{overflow:hidden;animation:fin .6s var(--out)}body.panel{overflow:auto}
+body.bye{opacity:0;transform:scale(1.04);filter:blur(10px)}@keyframes fin{from{opacity:0;filter:blur(10px)}}
+body.lock .P,body.panel .L,body.panel>.cr{display:none!important}
+:focus-visible{outline:4px solid #ec4899;outline-offset:0}
+.g{background:#fff;border:4px solid #000;box-shadow:8px 8px 0 #000}
+/* video */
+#v{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none}
+body.panel #v.on{width:480px;height:360px;opacity:1;border:6px solid #000;border-radius:0;box-shadow:16px 16px 0 #000;z-index:99;top:auto;bottom:32px;left:auto;right:32px;transform:scaleX(-1)}
+/* pill */
+#pill{position:fixed;top:20px;left:0;right:0;margin:auto;width:128px;height:48px;border-radius:0;overflow:hidden;display:flex;align-items:center;justify-content:center;z-index:5;background:#facc15;border:4px solid #000;box-shadow:6px 6px 0 #000;transition:width .75s var(--sp),height .75s var(--sp),background .5s}
+#pill.open{width:280px;height:220px;background:#fff}
+.cam{position:absolute;top:14px;right:24px;width:12px;height:12px;border:3px solid #000;background:#16a34a;box-shadow:3px 3px 0 #000;transition:opacity .25s}.open .cam{opacity:0}
+.inner{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.inner>*{opacity:0;transform:translateY(8px) scale(.94);transition:opacity .35s var(--out),transform .5s var(--sp)}
+.open .inner>*{opacity:1;transform:none}.open .inner>:nth-child(1){transition-delay:.2s}.open .inner>:nth-child(2){transition-delay:.28s}.open .inner>:nth-child(3){transition-delay:.34s}
+#s1{font-size:18px;font-weight:900;margin:0;letter-spacing:-.01em;text-transform:uppercase}#s2{font-size:14px;font-weight:700;margin:0;color:#000;background:#ec4899;padding:2px 6px;border:2px solid #000;box-shadow:2px 2px 0 #000}
+svg.gl{width:92px;height:92px;overflow:visible}svg.gl *{fill:none;stroke-linecap:square;stroke-linejoin:miter}
+.face{stroke:#000;stroke-width:4;transition:opacity .25s}.scan{stroke:none;fill:url(#bm);opacity:0}
+.okk,.bad{stroke-width:5;opacity:0}.okk{stroke:#15803d}.bad{stroke:#b91c1c}.dr{stroke-dasharray:1;stroke-dashoffset:1}
+.dot,.md{fill:#000!important;stroke:none}.an{display:none}.md{animation:mdk 1.2s ease-in-out infinite;opacity:.2}
+[data-an=classic].scanning .brk{animation:pl 1.1s infinite}[data-an=classic].scanning .scan{opacity:1;animation:sw 1.4s ease-in-out infinite}
+#pill.scanning[data-an=ring] .a-ring{display:inline;animation:spin 1.1s linear infinite;transform-origin:32px 32px}
+#pill.scanning[data-an=pulse] .a-pulse{display:inline;animation:pu 1.4s ease-out infinite;transform-origin:32px 32px}#pill.scanning[data-an=pulse] .p2{animation-delay:.7s}
+#pill.scanning[data-an=mesh] .a-mesh{display:inline}
+#pill.scanning[data-an=aurora]{animation:au 1.4s linear infinite}
+@keyframes pl{50%{opacity:.4}}@keyframes sw{50%{transform:translateY(60px)}}@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pu{from{transform:scale(.4);opacity:.9}to{transform:scale(1.6);opacity:0}}@keyframes mdk{50%{opacity:1}}
+@keyframes au{0%,100%{box-shadow:0 0 0 4px #000,8px 8px 0 #000}50%{box-shadow:0 0 0 4px #000,8px 8px 0 var(--c2)}}
+.success .face,.fail .face{opacity:0}.success .okk,.fail .bad{opacity:1}
+.success .okk{animation:pop .55s var(--sp)}.success .okk .dr,.fail .bad .dr{animation:dw .45s .1s forwards}
+#pill.success{background:#4ade80}#pill.fail{background:#f87171}
+@keyframes pop{from{transform:scale(.4);opacity:0}}@keyframes dw{to{stroke-dashoffset:0}}
+#pill.fail{animation:sk .6s}@keyframes sk{15%{transform:translateX(-10px)}30%{transform:translateX(9px)}45%{transform:translateX(-7px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+#pill.open[data-an=pulse]{width:380px;height:100px}
+[data-an=pulse] .inner{display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center;text-align:left;padding:0 22px}
+[data-an=pulse] .inner svg{grid-row:1/3;width:64px;height:64px}[data-an=pulse] #s1{align-self:end}[data-an=pulse] #s2{align-self:start;width:fit-content}
+#pill.open[data-an=ring]{width:240px;height:240px}[data-an=ring] .inner svg{width:84px;height:84px}[data-an=ring] #s2{display:none}
+#pill.open[data-an=mesh]{width:240px;height:260px}[data-an=mesh] .inner svg{width:122px;height:122px}
+/* lock controls */
+#acts{position:fixed;top:50%;left:0;right:0;transform:translateY(-50%);display:flex;gap:14px;justify-content:center}
+.lb{height:54px;padding:0 34px;border-radius:0;font:inherit;font-size:18px;font-weight:900;text-transform:uppercase;color:#000;cursor:pointer;transition:all .2s;background:#fff}
+.lb:hover{transform:translate(-2px,-2px);box-shadow:10px 10px 0 #000}.lb:active{transform:translate(4px,4px);box-shadow:0 0 0 #000}
+#pw{position:fixed;top:50%;left:0;right:0;margin:-27px auto 0;width:320px;height:60px;border-radius:0;border:4px solid #000;box-shadow:8px 8px 0 #000;text-align:center;font:inherit;font-size:18px;font-weight:800;color:#000;outline:0;opacity:0;pointer-events:none;transform:scale(.9);transition:opacity .4s,transform .55s var(--sp);background:#fff}
+#pw.show{opacity:1;pointer-events:auto;transform:scale(1)}#pw:focus-visible{background:#facc15}
+.shake{animation:sk .5s}
+.cr{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:max-content;font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;background:#000;color:#fff;padding:4px 10px;border:2px solid #000;box-shadow:4px 4px 0 var(--c2);z-index:1}
+/* panel */
+.wrap{padding:24px 32px 32px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;background:#000;padding:12px 24px;box-shadow:8px 8px 0 var(--c2);border:4px solid #000}.top h1{margin:0;font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch}.span2{grid-column:span 2}
+.card{padding:24px;border-radius:0;border:4px solid #000;box-shadow:8px 8px 0 #000;background:#fff;animation:up .65s var(--out) backwards;animation-delay:calc(var(--i)*70ms);transition:all .2s}
+.card:hover{transform:translate(-4px,-4px);box-shadow:12px 12px 0 var(--c2)}
+@keyframes up{from{opacity:0;transform:translateY(24px)}}
+.hd{display:flex;align-items:center;gap:12px;margin-bottom:12px}h2{margin:0 0 12px;font-size:20px;font-weight:900;text-transform:uppercase}.hd h2{margin:0;flex:1}
+.n{width:32px;height:32px;border:3px solid #000;box-shadow:3px 3px 0 #000;display:grid;place-items:center;font-size:16px;font-weight:900;background:#facc15;color:#000}
+.chip{font-size:12px;font-weight:900;text-transform:uppercase;padding:4px 12px;border:3px solid #000;box-shadow:3px 3px 0 #000;background:#fff;color:#000}.chip.ok{background:#4ade80}
+.card p{margin:4px 0 14px;font-size:15px;font-weight:700;color:#000;background:#e2e8f0;padding:8px;border:2px solid #000;box-shadow:4px 4px 0 #000}#msg{min-height:36px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{height:44px;padding:0 20px;border-radius:0;border:4px solid #000;font:inherit;font-size:15px;font-weight:900;text-transform:uppercase;color:#000;cursor:pointer;background:#fff;box-shadow:6px 6px 0 #000;transition:all .15s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #000}.btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 #000}.btn.pri{background:var(--c2);color:#fff;text-shadow:2px 2px 0 #000}
+.top .btn{border-color:#fff;color:#fff;background:#000;box-shadow:4px 4px 0 #fff}.top .btn:hover{background:#fff;color:#000}
+.card input[type=password]{width:100%;height:44px;border-radius:0;border:4px solid #000;box-shadow:4px 4px 0 #000;padding:0 14px;font:inherit;font-size:16px;font-weight:700;margin-bottom:12px;background:#fff;color:#000}
+.card input[type=password]:focus{background:#facc15;outline:none}
+details{margin-top:12px;font-size:14px;font-weight:800}summary{cursor:pointer;color:#000;margin-bottom:12px;text-transform:uppercase;background:#facc15;padding:6px;border:3px solid #000;box-shadow:4px 4px 0 #000;display:inline-block}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:3px solid #000;font-size:15px;font-weight:800;text-transform:uppercase}
+.sl{padding:10px 0;border-top:3px solid #000;}.sl label{display:flex;justify-content:space-between;font-size:14px;font-weight:800;text-transform:uppercase;margin-bottom:8px}em{font-style:normal;background:#000;color:#fff;padding:2px 6px}
+select{height:40px;border-radius:0;border:4px solid #000;box-shadow:4px 4px 0 #000;padding:0 12px;font:inherit;font-size:15px;font-weight:800;text-transform:uppercase;background:#fff;color:#000}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:12px;border:3px solid #000;background:linear-gradient(90deg,var(--c2) var(--p,50%),#fff var(--p,50%));box-shadow:4px 4px 0 #000}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:32px;margin-top:-13px;border:4px solid #000;border-radius:0;background:#facc15;box-shadow:4px 4px 0 #000;transition:transform .15s}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.1);background:#ec4899}
+.sw{position:relative;width:60px;height:34px;flex:none}.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.sw i{position:absolute;inset:0;border:4px solid #000;background:#fff;box-shadow:4px 4px 0 #000;transition:background .25s}
+.sw i::after{content:"";position:absolute;top:0;left:0;width:26px;height:26px;background:#000;transition:transform .2s var(--sp)}
+.sw input:checked+i{background:#4ade80}.sw input:checked+i::after{transform:translateX(26px)}.sw input:focus-visible+i{outline:4px solid #ec4899;outline-offset:4px}
+.pv{height:84px;border-radius:0;position:relative;margin-bottom:16px;background:linear-gradient(var(--ang),var(--c1),var(--c2));border:4px solid #000;box-shadow:6px 6px 0 #000}
+.pv i{position:absolute;top:12px;left:50%;width:80px;height:24px;margin-left:-40px;border:4px solid #000;border-radius:0;background:#fff;box-shadow:4px 4px 0 #000}
+.sw5{display:flex;gap:12px;margin-bottom:12px}.sw5 button{width:38px;height:38px;border-radius:0;border:4px solid #000;padding:0;cursor:pointer;box-shadow:4px 4px 0 #000;transition:transform .2s var(--sp)}
+.sw5 button:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #000}.sw5 button.on{outline:4px solid #000;outline-offset:2px;transform:translate(2px,2px);box-shadow:0 0 0 #000}
+input[type=color]{width:44px;height:44px;border:4px solid #000;padding:0;background:#fff;cursor:pointer;border-radius:0;box-shadow:4px 4px 0 #000}
+input[type=color]::-webkit-color-swatch-wrapper{padding:2px}input[type=color]::-webkit-color-swatch{border:2px solid #000;border-radius:0}
+.about{text-align:center;margin:20px 0 0;font-size:14px;font-weight:900;text-transform:uppercase;background:#000;color:#fff;padding:8px;border:4px solid #000;box-shadow:6px 6px 0 var(--c2);display:inline-block}
+/* popup */
+#pop{position:fixed;left:0;right:0;top:50%;margin:-140px auto 0;width:min(400px,90vw);padding:32px;border-radius:0;border:6px solid #000;background:#fff;box-shadow:12px 12px 0 #000;text-align:center;z-index:20;animation:pp .45s var(--sp)}
+@keyframes pp{from{opacity:0;transform:scale(.9) translateY(20px)}}#pop[hidden]{display:none}
+#pi{width:72px;height:72px;margin:0 auto 16px;border:6px solid #000;box-shadow:6px 6px 0 #000;display:grid;place-items:center;font-size:40px;font-weight:900;color:#000;background:#4ade80}#pi.err{background:#f87171}
+#pop h3{margin:0 0 10px;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;background:#facc15;display:inline-block;padding:4px 12px;border:4px solid #000;box-shadow:4px 4px 0 #000}#pop p{margin:12px 0 20px;font-size:16px;font-weight:700;color:#000}#pop .btns{justify-content:center}
+@media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.span2{grid-column:1/-1}}@media(max-width:700px){.grid{grid-template-columns:1fr}.wrap{padding:16px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style></head><body>
+<div class="cr">WindowsHello v1.0 · by Nikhil</div>
+<video id="v" muted playsinline></video>
+<div id="pill" class="g L" data-an="classic"><span class="cam"></span><div class="inner">
+<svg class="gl" viewBox="0 0 64 64"><defs><linearGradient id="bm"><stop offset="0" stop-color="#38bdf8" stop-opacity="0"/><stop offset=".5" stop-color="#38bdf8"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></linearGradient></defs>
+<g class="face"><g class="brk"><circle cx="32" cy="32" r="26"/></g><circle class="dot" cx="24" cy="27" r="2.6"/><circle class="dot" cx="40" cy="27" r="2.6"/><path d="M23 40c5 5 13 5 18 0"/>
+<circle class="an a-ring" cx="32" cy="32" r="30" pathLength="1" stroke-dasharray=".25 .75"/><circle class="an a-pulse" cx="32" cy="32" r="12"/><circle class="an a-pulse p2" cx="32" cy="32" r="12"/>
+<g class="an a-mesh"><circle class="md" cx="18" cy="18" r="2"/><circle class="md" cx="32" cy="18" r="2" style="animation-delay:.15s"/><circle class="md" cx="46" cy="18" r="2" style="animation-delay:.3s"/><circle class="md" cx="18" cy="32" r="2" style="animation-delay:.15s"/><circle class="md" cx="32" cy="32" r="2" style="animation-delay:.3s"/><circle class="md" cx="46" cy="32" r="2" style="animation-delay:.45s"/><circle class="md" cx="18" cy="46" r="2" style="animation-delay:.3s"/><circle class="md" cx="32" cy="46" r="2" style="animation-delay:.45s"/><circle class="md" cx="46" cy="46" r="2" style="animation-delay:.6s"/></g>
+<rect class="scan" x="10" y="12" width="44" height="4" rx="2"/></g>
+<g class="okk"><circle cx="32" cy="32" r="24"/><path class="dr" pathLength="1" d="M21 33l8 8 15-17"/></g>
+<g class="bad"><circle cx="32" cy="32" r="24"/><path class="dr" pathLength="1" d="M23 23l18 18"/><path class="dr" pathLength="1" d="M41 23L23 41"/></g></svg>
+<p id="s1" role="status" aria-live="polite"></p><p id="s2"></p></div></div>
+<div id="acts" class="L"><button id="retry" class="g lb" hidden>Try again</button><button id="skip" class="g lb">Skip</button></div>
+<input id="pw" class="g L" type="password" placeholder="Password" autocomplete="off" aria-label="Password">
+
+<main class="P wrap">
+<header class="top"><h1>WindowsHello</h1><button id="quit" class="btn">Quit app</button></header>
+<div class="grid">
+<section class="card g" style="--i:0"><div class="hd"><b class="n">1</b><h2>Enroll face</h2><span id="cf" class="chip"></span></div>
+<p>Sit in good light and slowly turn your head while it scans.</p><p id="msg" role="status" aria-live="polite"></p>
+<div class="btns"><button id="en" class="btn pri">Enroll face</button><button id="cl" class="btn">Remove</button></div></section>
+<section class="card g" style="--i:1"><div class="hd"><b class="n">2</b><h2>Test</h2></div>
+<p>Check that your face unlocks. If it does not, press Skip and use your password.</p>
+<div class="btns"><button id="test" class="btn pri">Test lock</button></div></section>
+<section class="card g" style="--i:2"><div class="hd"><b class="n">3</b><h2>Password</h2><span id="cpw" class="chip"></span></div>
+<input id="cp" type="password" placeholder="Current password" aria-label="Current password">
+<input id="np" type="password" placeholder="Choose a password (min 4)" aria-label="New password">
+<div class="btns"><button id="sp" class="btn pri">Save</button></div>
+<details id="more" hidden><summary>More options</summary><div class="btns"><button id="tg" class="btn">Disable</button><button id="dl" class="btn">Delete</button></div></details></section>
+<section class="card g span2" style="--i:3"><h2>Settings</h2>
+<div class="sl"><label for="tr">Transparency <em id="trv"></em></label><input id="tr" type="range" min=".15" max=".85" step=".01"></div>
+<div class="sl"><label for="thr">Match strictness (lower = stricter) <em id="thv"></em></label><input id="thr" type="range" min=".35" max=".65" step=".01"></div>
+<div class="row"><label for="an">Scan animation</label><select id="an"><option value="random">Random</option><option value="classic">Island</option><option value="pulse">Wide</option><option value="ring">Bubble</option><option value="mesh">Mesh</option><option value="aurora">Glow</option></select></div>
+<div class="row"><label for="auto">Start with Windows</label><label class="sw"><input id="auto" type="checkbox"><i></i></label></div>
+<div class="row"><label for="wk">Lock after sleep</label><label class="sw"><input id="wk" type="checkbox"><i></i></label></div>
+<div class="row"><span>Exit shortcut <em id="sv">••••</em></span><span class="btns"><button id="ss" class="btn">Set</button><button id="sh" class="btn">Show</button></span></div></section>
+<section class="card g" style="--i:4"><h2>Look</h2><div class="pv"><i class="g"></i></div><div class="sw5" id="pre"></div>
+<div class="row"><span>Colour 1</span><input id="c1" type="color"></div><div class="row"><span>Colour 2</span><input id="c2" type="color"></div>
+<div class="sl"><label for="ang">Direction <em id="av"></em></label><input id="ang" type="range" min="0" max="360" step="5"></div>
+<button id="rs" class="btn">Reset colours</button></section>
+</div>
+<p class="about">WindowsHello v1.0 · Made by Nikhil</p></main>
+<div id="pop" class="g" role="alertdialog" aria-modal="true" aria-labelledby="pt" hidden><div id="pi"></div><h3 id="pt"></h3><p id="pm"></p><div class="btns"><button id="pc" class="btn" hidden>Cancel</button><button id="po" class="btn pri">OK</button></div></div>
+
+<script>
+const $=i=>document.getElementById(i),W=ms=>new Promise(r=>setTimeout(r,ms)),V=$('v'),P=$('pill');
+const M=new URLSearchParams(location.search).get('mode');document.body.className=M;
+let st,tk=0,mp;
+const dist=(a,b)=>{let s=0;for(let i=0;i<128;i++)s+=(a[i]-b[i])**2;return Math.sqrt(s)};
+const models=()=>mp||(mp=(()=>{const u='node_modules/@vladmandic/face-api/model';return Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(u),faceapi.nets.faceLandmark68Net.loadFromUri(u),faceapi.nets.faceRecognitionNet.loadFromUri(u)])})());
+async function cam(){if(!V.srcObject){V.srcObject=await navigator.mediaDevices.getUserMedia({video:{width:320,height:240}});await V.play();V.classList.add('on')}}
+const stop=()=>{V.srcObject&&V.srcObject.getTracks().forEach(t=>t.stop());V.srcObject=null;V.classList.remove('on')};
+async function desc(){const r=await faceapi.detectSingleFace(V,new faceapi.TinyFaceDetectorOptions({inputSize:224})).withFaceLandmarks().withFaceDescriptor();return r&&r.descriptor}
+const say=(a,b)=>{$('s1').textContent=a;$('s2').textContent=b||''};
+const fill=el=>el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100)+'%');
+function look(o){const r=document.documentElement.style,L=h=>{const n=parseInt(h.slice(1),16);return(.299*(n>>16)+.587*(n>>8&255)+.114*(n&255))/255};
+  r.setProperty('--c1',o.c1);r.setProperty('--c2',o.c2);r.setProperty('--ang',o.ang+'deg');
+  r.setProperty('--d','color-mix(in srgb,'+o.c2+' 40%,#0b3b5c)');r.setProperty('--h1',(L(o.c1)+L(o.c2))/2<.5?'#fff':'#0b3b5c')}
+function pop(kind,title,msg,ask){return new Promise(res=>{const p=$('pop'),e=kind==='err';$('pi').className=e?'err':'';$('pi').textContent=e?'!':'✓';
+  $('pt').textContent=title;$('pm').textContent=msg;$('pc').hidden=!ask;p.hidden=false;$('po').focus();
+  const end=v=>{p.hidden=true;res(v)};$('po').onclick=()=>end(true);$('pc').onclick=()=>end(false)})}
+(async()=>{st=await G.inv('state');document.documentElement.style.setProperty('--a',1-st.set.tr);look(st.set);M==='lock'?lock():panel()})();
+
+async function done(){document.body.classList.add('bye');await W(750);G.inv('unlock')}
+function showPw(){P.className='g L';$('acts').style.display='none';setTimeout(()=>{$('pw').classList.add('show');$('pw').focus()},450)}
+async function lock(){
+  $('skip').onclick=()=>{tk++;stop();showPw()};
+  $('retry').onclick=()=>scanFlow();
+  $('pw').addEventListener('keydown',async e=>{if(e.key!=='Enter')return;
+    if(await G.inv('pass:check',e.target.value))done();
+    else{e.target.value='';e.target.classList.remove('shake');void e.target.offsetWidth;e.target.classList.add('shake')}});
+  if(!st.pwOn)$('skip').hidden=true;
+  if(!st.enrolled)return showPw();
+  models().catch(()=>{});
+  scanFlow();
+}
+async function scanFlow(){
+  const t=++tk,alive=()=>t===tk;
+  $('retry').hidden=true;
+  P.dataset.an=st.set.anim==='random'?['classic','ring','mesh','pulse','aurora'][Math.random()*5|0]:st.set.anim;
+  const was=P.classList.contains('open');
+  P.classList.remove('fail','success','scanning');
+  if(!was){await W(150);if(!alive())return;P.classList.add('open')}
+  say('Looking for you');
+  try{await models();await cam()}catch(x){if(alive()){P.classList.add('fail');say('Camera error','Try again or Skip');$('retry').hidden=false}return}
+  if(!alive())return;
+  P.classList.add('scanning');say('Scanning face','Look straight');
+  const S=(await G.inv('face:get')).map(a=>Float32Array.from(a));let n=0;const t0=Date.now();
+  while(alive()&&Date.now()-t0<10000){const d=await desc();if(d){const b=Math.min(...S.map(s=>dist(s,d)));n=b<st.set.thr?n+1:0;if(n>=3)break}}
+  if(!alive())return;stop();P.classList.remove('scanning');
+  if(n>=3){P.classList.add('success');say('Unlocked','Face matched');await W(1300);done()}
+  else{P.classList.add('fail');say('Face not recognised','Try again or Skip');$('retry').hidden=false}
+}
+
+async function panel(){
+  const say2=t=>$('msg').textContent=t;
+  const chip=(id,ok,a,b)=>{const e=$(id);e.textContent=ok?a:b;e.className='chip'+(ok?' ok':'')};
+  const PR=[['Sky','#ffffff','#7dd3fc'],['Pink','#fff1f2','#f9a8d4'],['Purple','#f5f3ff','#a5b4fc'],['Mint','#f0fdf4','#6ee7b7'],['Sunset','#fff7ed','#fb923c']];
+  $('pre').innerHTML=PR.map((p,i)=>`<button data-i="${i}" aria-label="${p[0]} colours" title="${p[0]}" style="background:linear-gradient(135deg,${p[1]},${p[2]})"></button>`).join('');
+  const sel=()=>[...$('pre').children].forEach((b,i)=>b.classList.toggle('on',PR[i][1]===$('c1').value&&PR[i][2]===$('c2').value));
+  const Lk=()=>{const o={c1:$('c1').value,c2:$('c2').value,ang:+$('ang').value};$('av').textContent=o.ang+'°';fill($('ang'));sel();look(o);G.inv('set',o)};
+  ['c1','c2','ang'].forEach(i=>$(i).oninput=Lk);
+  $('pre').onclick=e=>{const b=e.target.closest('button');if(!b)return;const p=PR[b.dataset.i];$('c1').value=p[1];$('c2').value=p[2];Lk()};
+  $('rs').onclick=()=>{$('c1').value='#ffffff';$('c2').value='#7dd3fc';$('ang').value=135;Lk()};
+  const R=async()=>{st=await G.inv('state');const s=st.set;
+    chip('cf',st.enrolled,'Done','Not done');chip('cpw',st.hasPass&&st.pwOn,'On',st.hasPass?'Disabled':'Not set');
+    $('cl').hidden=!st.enrolled;$('cp').hidden=!st.hasPass;$('more').hidden=!st.hasPass;
+    $('np').placeholder=st.hasPass?'New password (min 4)':'Choose a password (min 4)';$('tg').textContent=st.pwOn?'Disable':'Enable';
+    $('tr').value=s.tr;$('thr').value=s.thr;$('an').value=s.anim;$('auto').checked=s.auto;$('wk').checked=s.wake!==false;
+    $('c1').value=s.c1;$('c2').value=s.c2;$('ang').value=s.ang;$('av').textContent=s.ang+'°';
+    $('trv').textContent=Math.round(s.tr*100)+'%';$('thv').textContent=(+s.thr).toFixed(2);['tr','thr','ang'].forEach(i=>fill($(i)));sel()};
+  await R();
+  const S=()=>{const o={thr:+$('thr').value,tr:+$('tr').value,auto:$('auto').checked,anim:$('an').value,wake:$('wk').checked};
+    $('thv').textContent=o.thr.toFixed(2);$('trv').textContent=Math.round(o.tr*100)+'%';fill($('thr'));fill($('tr'));
+    document.documentElement.style.setProperty('--a',1-o.tr);G.inv('set',o)};
+  ['thr','tr','auto','an','wk'].forEach(i=>{$(i).onchange=S;$(i).oninput=S});
+  const bad=r=>pop('err',r.err==='face'?'Enroll your face first':'Wrong password',r.err==='face'?'Face unlock must be set up before the password can be turned off.':'Type your current password in step 3.');
+  $('sh').onclick=()=>{const h=$('sv').textContent==='••••';$('sv').textContent=h?st.set.sc:'••••';$('sh').textContent=h?'Hide':'Show'};
+  $('ss').onclick=()=>{say2('Press your new shortcut now...');const h=async e=>{e.preventDefault();if(['Control','Shift','Alt','Meta'].includes(e.key))return;
+    removeEventListener('keydown',h,true);say2('');
+    const mo=[e.ctrlKey&&'Control',e.altKey&&'Alt',e.shiftKey&&'Shift'].filter(Boolean),k=e.key.length===1?e.key.toUpperCase():e.key;
+    if(!mo.length||!/^([A-Z0-9]|F\d{1,2})$/.test(k))return pop('err','Invalid shortcut','Use Ctrl, Alt or Shift plus a letter, number or F-key.');
+    const r=await G.inv('sc:set',{cur:$('cp').value,sc:[...mo,k].join('+')});
+    if(r.err)return pop('err',r.err==='pw'?'Wrong password':'Shortcut not allowed',r.err==='pw'?'Type your current password in step 3.':'Pick a different combination.');
+    $('cp').value='';await R();pop('ok','Shortcut saved','Try it on the lock screen (Test lock).')};addEventListener('keydown',h,true)};
+  $('sp').onclick=async()=>{const p=$('np').value;if(p.length<4)return pop('err','Password too short','Use at least 4 characters.');
+    const r=await G.inv('pass:set',{cur:$('cp').value,p});if(r.err)return bad(r);
+    $('np').value=$('cp').value='';await R();pop('ok','Password saved','Your new password is active.')};
+  $('tg').onclick=async()=>{const on=!st.pwOn,r=await G.inv('pass:toggle',{cur:$('cp').value,on});if(r.err)return bad(r);
+    $('cp').value='';await R();pop('ok',on?'Password enabled':'Password disabled',on?'Skip and password entry are back.':'Only your face will unlock now. Remember your exit shortcut.')};
+  $('dl').onclick=async()=>{if(!await pop('err','Delete password?','Only your face will unlock. This cannot be undone.',true))return;
+    const r=await G.inv('pass:delete',{cur:$('cp').value});if(r.err)return bad(r);
+    $('cp').value='';await R();pop('ok','Password deleted','Only your face unlocks now.')};
+  $('cl').onclick=async()=>{await G.inv('face:clear');await R();say2('Face removed.')};
+  $('test').onclick=()=>{if(!st.hasPass&&!st.enrolled)return pop('err','Nothing to lock with','Enroll your face or set a password first.');G.inv('lockNow')};
+  $('quit').onclick=()=>G.inv('quit');
+  $('en').onclick=async()=>{
+    try{say2('Loading face models...');await models();await cam()}catch(x){say2('');return pop('err','Camera did not start','Allow camera access in Windows Settings and close other apps using the camera.')}
+    const tips=['Look straight','Slightly left','Slightly right','Slightly up','Slightly down'],out=[],t0=Date.now();
+    while(out.length<15&&Date.now()-t0<60000){say2(`${tips[out.length%5]} (${out.length}/15)`);const d=await desc();if(d){out.push(Array.from(d));await W(600)}}
+    stop();say2('');
+    if(out.length<15)return pop('err','Could not see your face','Add more light and try again.');
+    await G.inv('face:save',out);G.inv('notify',{title:'WindowsHello',body:'Face enrolled successfully'});await R();
+    pop('ok','Face enrolled','Your face is saved on this laptop. Press Test lock to try it.')};
+}
+</script></body></html>
+
